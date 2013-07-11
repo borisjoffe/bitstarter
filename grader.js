@@ -28,7 +28,7 @@ var HTMLFILE_DEFAULT = "index.html";
 var TEMP_HTMLFILE = "tempindex.html";
 var CHECKSFILE_DEFAULT = "checks.json";
 var URL_DEFAULT = "http://lit-brook-5967.herokuapp.com/";
-var DBG = true;
+var DBG = false;
 
 var assertFileExists = function(infile) {
     var instr = infile.toString();
@@ -65,7 +65,7 @@ var clone = function(fn) {
 };
 
 var checkAndOutputJson = function(htmlfile, checksfile) {
-	console.log("at end: htmlfile - " + htmlfile + "\nchecksfile = " + checksfile);
+	if (DBG) console.log("at end: htmlfile - " + htmlfile + "\nchecksfile = " + checksfile);
 	var checkJson = checkHtmlFile(htmlfile, checksfile);
 	var outJson = JSON.stringify(checkJson, null, 4);
 	console.log(outJson);
@@ -75,7 +75,6 @@ if(require.main == module) {
     program
         .option('-c, --checks <check_file>', 'Path to checks.json', clone(assertFileExists), CHECKSFILE_DEFAULT)
         .option('-f, --file <html_file>', 'Path to index.html', clone(assertFileExists), HTMLFILE_DEFAULT)
-        //.option('-u, --url <website_url>', 'URL input', clone(assertFileExists), HTMLFILE_DEFAULT)
         .option('-u, --url <website_url>', 'URL input', URL_DEFAULT)
         .parse(process.argv);
 	if (DBG) console.log("checks: " + program.checks + "\nfile: " + program.file + "\nurl: " + program.url + "\n" 
@@ -92,15 +91,15 @@ if(require.main == module) {
 	});
 
 	if (usingURL && !usingFile) {
-		console.log("using URL");
+		if (DBG) console.log("using URL");
 		rest = require("restler");
 		rest.get(program.url).on('complete', function (data) {
-			console.log("Getting tempindex.html from URL");
+			if (DBG) console.log("Getting tempindex.html from URL");
 			fs.writeFileSync(TEMP_HTMLFILE, data);
 			checkAndOutputJson(TEMP_HTMLFILE, program.checks);
 		});
 	} else {
-		console.log("going back to default file processing");
+		if (DBG) console.log("going back to default file processing");
 		checkAndOutputJson(program.file, program.checks);
 	}
 
