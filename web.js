@@ -1,5 +1,5 @@
 //var express = require('express');
-var fs = require('fs');
+//var fs = require('fs');
 var http = require('http');
 var nodestatic = require('node-static');
 var file = new(nodestatic.Server)();
