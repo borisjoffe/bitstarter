@@ -1,10 +1,10 @@
 //var express = require('express');
-var fs = require('fs');
+//var fs = require('fs');
 var http = require('http');
 var nodestatic = require('node-static');
 var file = new(nodestatic.Server)();
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 8080;
 
 http.createServer(function(req, res) {
 	file.serve(req, res);
